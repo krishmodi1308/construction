@@ -16,6 +16,7 @@ Route::get('get-latest-services', [FrontServiceController::class, 'latestService
 //    return $request->user();
 //})->middleware('auth:sanctum');
 
+
 Route::group(['middleware' => ['auth:sanctum']], function() {
     // protected routes
 

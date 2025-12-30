@@ -54,7 +54,8 @@ const Edit = ({placeholder}) => {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const newData = {...data, "content": content, "imageId": imageId}
+        // "content": content,
+        const newData = {...data, "imageId": imageId}
         const res = await fetch(apiUrl+'services/'+params.id,{
             'method' : 'PUT',
             'headers' : {

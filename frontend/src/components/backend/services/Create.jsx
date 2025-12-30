@@ -1,5 +1,5 @@
 import React, { useState, useRef, useMemo } from "react";
-import JoditEditor from "jodit-react";
+// import JoditEditor from "jodit-react";
 import Header from "../../common/Header.jsx";
 import Sidebar from "../../common/Sidebar.jsx";
 import Footer from "../../common/Footer.jsx";
@@ -31,7 +31,8 @@ const Create = ({placeholder}) => {
 
     const navigate = useNavigate();
     const onSubmit = async (data) => {
-        const newData = {...data, "content": content, "imageId": imageId}
+        // "content": content,
+        const newData = {...data, "imageId": imageId}
         const res = await fetch(apiUrl+'services',{
             'method' : 'POST',
             'headers' : {
