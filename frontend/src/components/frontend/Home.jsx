@@ -56,7 +56,7 @@ const Home = () => {
                                 decades of experience, innovation, and flexibility to consistently deliver excellence.</p>
                         </div>
                         <div className='row pt-4'>
-                            <div className='col-md-4'>
+                            <div className='col-md-4 mb-2'>
                                 <div className='card shadow border-0 p-4'>
                                     <div className='card-icon'>
                                         <img src={icon1} alt='' />
@@ -67,7 +67,7 @@ const Home = () => {
                                     <p>Small actions create big impacts. It all begins and ends with each employee committing to safer work practices daily, ensuring they return home safely.</p>
                                 </div>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-md-4 mb-2'>
                                 <div className='card shadow border-0 p-4'>
                                     <div className='card-icon'>
                                         <img src={icon2} alt='' />
@@ -78,7 +78,7 @@ const Home = () => {
                                     <p>Small actions create big impacts. It all begins and ends with each employee committing to safer work practices daily, ensuring they return home safely.</p>
                                 </div>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-md-4 mb-2'>
                                 <div className='card shadow border-0 p-4'>
                                     <div className='card-icon'>
                                         <img src={icon3} alt='' />
@@ -105,11 +105,24 @@ const Home = () => {
                         </div>
                         <Swiper
                             modules={[Pagination]}
-                        spaceBetween={50}
-                        slidesPerView={3}
-                        pagination={{ clickable: true }}
+                            spaceBetween={20}
+                            pagination={{ clickable: true }}
+                            breakpoints={{
+                                0: {
+                                    slidesPerView: 1,
+                                },
+                                576: {
+                                    slidesPerView: 1,
+                                },
+                                768: {
+                                    slidesPerView: 2,
+                                },
+                                992: {
+                                    slidesPerView: 3,
+                                },
+                            }}
                         >
-                            <SwiperSlide>
+                        <SwiperSlide>
                                 <div className='card shadow border-0'>
                                     <div className='card-body p-5'>
                                         <div className='rating'>

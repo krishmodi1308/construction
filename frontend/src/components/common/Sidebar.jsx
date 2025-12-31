@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 const Sidebar = () => {
     const {logout} = useContext(AuthContext);
     return (
-        <div className='card shadow border-0'>
+        <div className='card shadow border-0 mb-3'>
             <div className='card-body p-4 sidebar'>
                 <h4>Sidebar</h4>
                 <ul>

@@ -331,6 +331,16 @@ footer {
     text-align: center;
   }
 }
+.section-5 {
+  .card-body {
+    padding: 2rem;
+
+    @include respond-max($sm) {
+      padding: 1.5rem;
+    }
+  }
+}
+
 .section-6{
   .card{
     border-radius: 40px;
