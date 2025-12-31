@@ -54,6 +54,7 @@ const Create = ({placeholder}) => {
     const handleFile = async (e) => {
         const formData = new FormData();
         formData.append("image", e.target.files[0]);
+        setisDisable(true);
 
         const res = await fetch(apiUrl + 'temp-images', {
             method: 'POST',
@@ -67,8 +68,10 @@ const Create = ({placeholder}) => {
         const result = await res.json();
 
         if (result.status === false) {
+            setisDisable(false);
             toast.error(result.errors.image[0]);
         } else {
+            setisDisable(false);
             setimageId(result.data.id);
         }
     };
