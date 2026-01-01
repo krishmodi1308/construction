@@ -448,3 +448,35 @@ footer {
     border-color: $secondary-color;
   }
 }
+
+.testimonial-card {
+  height: 100%;
+  min-height: 300px;
+
+  .content p {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.6;
+  }
+  .rating svg {
+    margin-right: 4px;
+  }
+  .meta img {
+    object-fit: cover;
+  }
+  .name {
+    font-weight: 600;
+  }
+  .designation {
+    font-size: 14px;
+    color: #777;
+  }
+}
+
+.swiper-slide {
+  height: auto;
+}
+
+
