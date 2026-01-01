@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {apiUrl, fileUrl} from "../common/http.jsx";
+import {Link} from "react-router-dom";
 
 const LatestProjects = () => {
     const [projects, setProjects] = useState([]);
@@ -38,7 +39,7 @@ const LatestProjects = () => {
                                             </div>
                                             <div className='service-content'>
                                                 <p>{project.short_desc}</p>
-                                                <a href='#' className='btn btn-primary small'>Read More</a>
+                                                <Link to={`/project/${project.slug}`} className='btn btn-primary small'>Read More</Link>
                                             </div>
                                         </div>
                                     </div>

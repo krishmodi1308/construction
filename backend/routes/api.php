@@ -24,6 +24,7 @@ Route::get('get-service/{slug}', [FrontServiceController::class, 'service']);
 
 Route::get('get-projects', [FrontProjectController::class, 'index']);
 Route::get('get-latest-projects', [FrontProjectController::class, 'latestProjects']);
+Route::get('get-project/{slug}', [FrontProjectController::class, 'project']);
 
 Route::get('get-articles', [FrontArticleController::class, 'index']);
 Route::get('get-latest-articles', [FrontArticleController::class, 'latestArticles']);

@@ -6,38 +6,38 @@ import {apiUrl, fileUrl} from "../common/http.jsx";
 import {Link, useParams} from "react-router-dom";
 import Testimonials from "../common/Testimonials.jsx";
 
-const ServiceDetail = () => {
+const ProjectDetail = () => {
     const params = useParams();
-    const [service, setService] = useState([]);
-    const [services, setServices] = useState([]);
-    const fetchService = async () => {
-        // const res = fetch(apiUrl+'get-service/'+params.id)
-        const res = await fetch(`${apiUrl}get-service/${params.id}`,{
+    const [project, setProject] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const fetchProject = async () => {
+        // const res = fetch(apiUrl+'get-project/'+params.id)
+        const res = await fetch(`${apiUrl}get-project/${params.id}`,{
             method: 'GET'
         });
         const result = await res.json();
-        setService(result.data);
+        setProject(result.data);
     }
 
-    const fetchServices = async () => {
-        // const res = fetch(apiUrl+'get-service/'+params.id)
-        const res = await fetch(`${apiUrl}get-services`,{
+    const fetchProjects = async () => {
+        // const res = fetch(apiUrl+'get-project/'+params.id)
+        const res = await fetch(`${apiUrl}get-projects`,{
             method: 'GET'
         });
         const result = await res.json();
-        setServices(result.data);
+        setProjects(result.data);
     }
 
     useEffect(() => {
-        fetchService();
-        fetchServices();
+        fetchProject();
+        fetchProjects();
     }, [params.id]);
 
     return (
         <>
             <Header/>
                 <main>
-                    <Hero preHeading='Quality. Integrity. Value.' heading={`${service.title}`} text=''/>
+                    <Hero preHeading='Quality. Integrity. Value.' heading={`${project.title}`} text=''/>
                 </main>
                 <section className='section-10'>
                     <div className='container-fluid py-5 bg-light'>
@@ -46,13 +46,13 @@ const ServiceDetail = () => {
                                 <div className='col-md-3'>
                                     <div className='card shadow sidebar border-0'>
                                         <div className='card-body px-4 py-4'>
-                                            <h3 className='mt-2 mb-3'>Our Services</h3>
+                                            <h3 className='mt-2 mb-3'>Our Projects</h3>
                                             <ul>
                                                 {
-                                                    services && services.map(service => {
+                                                    projects && projects.map(project => {
                                                         return (
-                                                            <li key={service.id}>
-                                                                <Link to={`/service/${service.slug}`}>{service.title}</Link>
+                                                            <li key={project.id}>
+                                                                <Link to={`/project/${project.slug}`}>{project.title}</Link>
                                                             </li>
                                                         )
                                                     })
@@ -63,10 +63,11 @@ const ServiceDetail = () => {
                                 </div>
                                 <div className='col-md-9'>
                                     <div className=''>
-                                        <img src={`${fileUrl}uploads/services/large/${service.image}`} className='w-100'/>
+                                        <img src={`${fileUrl}uploads/projects/large/${project.image}`} className='w-100'/>
                                     </div>
-                                    <h3 className='py-3'>{service.title}</h3>
-                                    <div dangerouslySetInnerHTML={{ __html:service.content }}></div>
+                                    <h3 className='py-3  text-info'>{project.title}</h3>
+                                    {/*<p className=''>{project.short_desc}</p>*/}
+                                    <div dangerouslySetInnerHTML={{ __html:project.content }}></div>
                                 </div>
                             </div>
                         </div>
@@ -81,4 +82,4 @@ const ServiceDetail = () => {
     )
 }
 
-export default ServiceDetail
+export default ProjectDetail

@@ -29,4 +29,21 @@ class ProjectController extends Controller
             'data' => $projects
         ]);
     }
+
+    public function project($slug)
+    {
+        $project = Project::where('slug', $slug)->firstOrFail();
+
+        if ($project == null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Service not found!'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $project
+        ]);
+    }
 }
