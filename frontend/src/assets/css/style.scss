@@ -7,6 +7,8 @@ $text-white: #fff;
 $dark-background: #222725;
 $light-background: #cacaca;
 
+$footer-background: #000;
+
 /* Dark mode colors */
 $dm-bg: #121212;
 $dm-surface: #1e1e1e;
@@ -414,7 +416,7 @@ footer {
 
   header,
   footer {
-    background-color: $dm-surface;
+    background-color: $footer-background;
   }
 
   .card {
