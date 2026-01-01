@@ -37,7 +37,7 @@ class ProjectController extends Controller
         if ($project == null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Service not found!'
+                'message' => 'Project not found!'
             ]);
         }
 

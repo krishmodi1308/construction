@@ -3,6 +3,7 @@ import Header from "../common/Header.jsx";
 import Footer from "../common/Footer.jsx";
 import Hero from "../common/Hero.jsx";
 import {apiUrl, fileUrl} from "../common/http.jsx";
+import {Link} from "react-router-dom";
 
 const Blogs = () => {
     const [articles, setArticles] = useState([]);
@@ -44,7 +45,7 @@ const Blogs = () => {
                                                     <div className='mb-3'>
                                                         <a href='#' className='title'>{article.title}</a>
                                                     </div>
-                                                    <a href='#' className='btn btn-primary small'>read more</a>
+                                                    <Link to={`/article/${article.slug}`} className='btn btn-primary small'>Read More</Link>
                                                 </div>
                                             </div>
                                         </div>

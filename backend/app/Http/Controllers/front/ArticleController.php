@@ -29,4 +29,21 @@ class ArticleController extends Controller
             'data' => $articles
         ]);
     }
+
+    public function article($slug)
+    {
+        $article = Article::where('slug', $slug)->firstOrFail();
+
+        if ($article == null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Article not found!'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $article
+        ]);
+    }
 }

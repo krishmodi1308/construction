@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {apiUrl, fileUrl} from "../common/http.jsx";
+import {Link} from "react-router-dom";
 
 const LatestArticles = () => {
     const [articles, setArticles] = useState([]);
@@ -36,7 +37,7 @@ const LatestArticles = () => {
                                                 <div className='mb-3'>
                                                     <h3>{article.title}</h3>
                                                 </div>
-                                                <a href='#' className='btn btn-primary small'>read more</a>
+                                                <Link to={`/article/${article.slug}`} className='btn btn-primary small'>Read More</Link>
                                             </div>
                                         </div>
                                     </div>

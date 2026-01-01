@@ -28,6 +28,7 @@ Route::get('get-project/{slug}', [FrontProjectController::class, 'project']);
 
 Route::get('get-articles', [FrontArticleController::class, 'index']);
 Route::get('get-latest-articles', [FrontArticleController::class, 'latestArticles']);
+Route::get('get-article/{slug}', [FrontArticleController::class, 'article']);
 
 Route::get('get-testimonials', [FrontTestimonialController::class, 'index']);
 Route::get('get-members', [FrontMemberController::class, 'index']);
