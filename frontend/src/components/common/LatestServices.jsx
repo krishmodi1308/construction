@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import serviceImg from '../../assets/images/construction1.jpg';
 import Header from "./Header.jsx";
 import {apiUrl, fileUrl} from "../common/http.jsx";
+import {Link} from "react-router-dom";
 
 const LatestServices = () => {
     const [services, setServices] = useState([]);
@@ -40,7 +41,7 @@ const LatestServices = () => {
                                             </div>
                                             <div className='service-content'>
                                                 <p>{service.short_desc}</p>
-                                                <a href='#' className='btn btn-primary small'>Read More</a>
+                                                <Link to={`/service/${service.id}`} className='btn btn-primary small'>Read More</Link>
                                             </div>
                                         </div>
                                     </div>

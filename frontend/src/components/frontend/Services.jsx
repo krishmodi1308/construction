@@ -3,6 +3,7 @@ import Header from "../common/Header.jsx";
 import Footer from "../common/Footer.jsx";
 import Hero from "../common/Hero.jsx";
 import {apiUrl, fileUrl} from "../common/http.jsx";
+import {Link} from "react-router-dom";
 
 const Services = () => {
     const [services, setServices] = useState([]);
@@ -46,7 +47,7 @@ const Services = () => {
                                                     </div>
                                                     <div className='service-content'>
                                                         <p>{service.short_desc}</p>
-                                                        <a href='#' className='btn btn-primary small'>Read More</a>
+                                                        <Link to={`/service/${service.id}`} className='btn btn-primary small'>Read More</Link>
                                                     </div>
                                                 </div>
                                             </div>

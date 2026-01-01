@@ -24,6 +24,10 @@ import {default as EditArticles} from "./components/backend/articles/Edit.jsx";
 import {default as ShowTestimonials} from "./components/backend/testimonials/Show.jsx";
 import {default as CreateTestimonials} from "./components/backend/testimonials/Create.jsx";
 import {default as EditTestimonials} from "./components/backend/testimonials/Edit.jsx";
+import {default as ShowMembers} from "./components/backend/members/Show.jsx";
+import {default as CreateMembers} from "./components/backend/members/Create.jsx";
+import {default as EditMembers} from "./components/backend/members/Edit.jsx";
+import ServiceDetail from "./components/frontend/ServiceDetail.jsx";
 
 function App() {
     return (
@@ -35,6 +39,7 @@ function App() {
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/blogs" element={<Blogs />} />
                 <Route path="/contact-us" element={<ContactUs />} />
+                <Route path="/service/:id" element={<ServiceDetail />} />
                 <Route path="/admin/login" element={<Login />} />
 
                 <Route path="/admin/dashboard" element={
@@ -112,6 +117,24 @@ function App() {
                 <Route path="/admin/testimonials/edit/:id" element={
                     <RequireAuth>
                         <EditTestimonials />
+                    </RequireAuth>
+                } />
+
+                <Route path="/admin/members" element={
+                    <RequireAuth>
+                        <ShowMembers />
+                    </RequireAuth>
+                } />
+
+                <Route path="/admin/members/create" element={
+                    <RequireAuth>
+                        <CreateMembers />
+                    </RequireAuth>
+                } />
+
+                <Route path="/admin/members/edit/:id" element={
+                    <RequireAuth>
+                        <EditMembers />
                     </RequireAuth>
                 } />
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\front\ServiceController as FrontServiceController;
 use App\Http\Controllers\front\ProjectController as FrontProjectController;
 use App\Http\Controllers\front\ArticleController as FrontArticleController;
 use App\Http\Controllers\front\TestimonialController as FrontTestimonialController;
+use App\Http\Controllers\front\MemberController as FrontMemberController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
@@ -13,11 +14,13 @@ use App\Http\Controllers\admin\TempImageController;
 use App\Http\Controllers\admin\ProjectController;
 use App\Http\Controllers\admin\ArticleController;
 use App\Http\Controllers\admin\TestimonialController;
+use App\Http\Controllers\admin\MemberController;
 
 Route::post('authenticate', [AuthenticationController::class, 'authenticate']);
 
 Route::get('get-services', [FrontServiceController::class, 'index']);
 Route::get('get-latest-services', [FrontServiceController::class, 'latestServices']);
+Route::get('get-service/{id}', [FrontServiceController::class, 'service']);
 
 Route::get('get-projects', [FrontProjectController::class, 'index']);
 Route::get('get-latest-projects', [FrontProjectController::class, 'latestProjects']);
@@ -26,6 +29,7 @@ Route::get('get-articles', [FrontArticleController::class, 'index']);
 Route::get('get-latest-articles', [FrontArticleController::class, 'latestArticles']);
 
 Route::get('get-testimonials', [FrontTestimonialController::class, 'index']);
+Route::get('get-members', [FrontMemberController::class, 'index']);
 
 //Route::get('/user', function (Request $request) {
 //    return $request->user();
@@ -63,6 +67,13 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::put('testimonials/{id}', [TestimonialController::class, 'update']);
     Route::get('testimonials/{id}', [TestimonialController::class, 'show']);
     Route::delete('testimonials/{id}', [TestimonialController::class, 'destroy']);
+
+    // members Routes
+    Route::post('members', [MemberController::class, 'store']);
+    Route::get('members', [MemberController::class, 'index']);
+    Route::put('members/{id}', [MemberController::class, 'update']);
+    Route::get('members/{id}', [MemberController::class, 'show']);
+    Route::delete('members/{id}', [MemberController::class, 'destroy']);
 
     // temp image routes
     Route::post('temp-images', [TempImageController::class, 'store']);
