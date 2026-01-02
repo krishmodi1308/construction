@@ -41,7 +41,7 @@ const About = () => {
                             {
                                 members && members.map(member =>{
                                     return (
-                                        <div className='col-md-6 col-lg-3 mb-3'>
+                                        <div className='col-md-6 col-lg-3 mb-3' key={member.id}>
                                             <div className='card shadow border-0 h-100'>
                                                 <div className='card-img-top'>
                                                     <img src={`${fileUrl}uploads/members/${member.image}`} alt='test' className='w-100'/>

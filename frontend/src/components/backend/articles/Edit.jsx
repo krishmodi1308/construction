@@ -1,208 +1,243 @@
-import React, {useMemo, useRef, useState} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Header from "../../common/Header.jsx";
 import Sidebar from "../../common/Sidebar.jsx";
-import {Link, useNavigate, useParams} from "react-router-dom";
 import Footer from "../../common/Footer.jsx";
-import {useForm} from "react-hook-form";
-import {apiUrl, token, fileUrl} from "../../common/http.jsx";
-import {toast} from "react-toastify";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import api from "../../common/axios";
+import { fileUrl } from "../../common/http.jsx";
 
-const Edit = ({placeholder}) => {
+const Edit = ({ placeholder }) => {
     const editor = useRef(null);
-    const [content, setContent] = useState('');
-    const [article, setArticle] = useState('');
-    const [isDisable, setisDisable] = useState(false);
-    const [imageId, setimageId] = useState(null);
-    const params = useParams();
+    const [isDisable, setIsDisable] = useState(false);
+    const [imageId, setImageId] = useState(null);
 
-    const config = useMemo(() => ({
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const config = useMemo(
+        () => ({
             readonly: false,
-            placeholder: placeholder || ''
+            placeholder: placeholder || "",
         }),
         [placeholder]
     );
 
-
     const {
         register,
         handleSubmit,
-        watch,
+        reset,
         formState: { errors },
-    } = useForm({
-        defaultValues: async () => {
-            const res = await fetch(apiUrl+'articles/'+params.id,{
-                'method' : 'GET',
-                'headers' : {
-                    'Content-type' : 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization' : `Bearer ${token()}`
-                }
-            });
-            const result = await res.json();
-            setContent(result.data.content);
-            setArticle(result.data);
-            return{
-                title: result.data.title,
-                slug: result.data.slug,
-                author: result.data.author,
-                content: result.data.content,
-                status: result.data.status,
-            }
-        }
-    })
+    } = useForm();
 
-    const navigate = useNavigate();
+    useEffect(() => {
+        const fetchArticle = async () => {
+            try {
+                const res = await api.get(`articles/${id}`);
+
+                if (!res.data.status) {
+                    toast.error(res.data.message);
+                    navigate("/admin/articles");
+                    return;
+                }
+
+                setArticle(res.data.data);
+
+                reset({
+                    title: res.data.data.title,
+                    slug: res.data.data.slug,
+                    author: res.data.data.author,
+                    content: res.data.data.content,
+                    status: res.data.data.status,
+                });
+            } catch (error) {
+                toast.error("Failed to load article");
+            }
+        };
+
+        fetchArticle();
+    }, [id, reset, navigate]);
 
     const onSubmit = async (data) => {
-        // "content": content,
-        const newData = {...data, "imageId": imageId}
-        const res = await fetch(apiUrl+'articles/'+params.id,{
-            'method' : 'PUT',
-            'headers' : {
-                'Content-type' : 'application/json',
-                'Accept': 'application/json',
-                'Authorization' : `Bearer ${token()}`
-            },
-            body: JSON.stringify(newData)
-        });
-        const result = await res.json();
-        if(result.status == true){
-            toast.success(result.message);
-            navigate('/admin/articles');
-        } else {
-            toast.error(result.message);
+        try {
+            setIsDisable(true);
+
+            const payload = {
+                ...data,
+                imageId,
+            };
+
+            const res = await api.put(`articles/${id}`, payload);
+
+            if (res.data.status) {
+                toast.success(res.data.message);
+                navigate("/admin/articles");
+            } else {
+                toast.error(res.data.message);
+            }
+        } catch (error) {
+            toast.error("Update failed");
+        } finally {
+            setIsDisable(false);
         }
-    }
+    };
 
     const handleFile = async (e) => {
-        const formData = new FormData();
-        formData.append("image", e.target.files[0]);
+        if (!e.target.files.length) return;
 
-        const res = await fetch(apiUrl + 'temp-images', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': `Bearer ${token()}`
-            },
-            body: formData
-        });
+        try {
+            const formData = new FormData();
+            formData.append("image", e.target.files[0]);
+            setIsDisable(true);
 
-        const result = await res.json();
+            const res = await api.post("temp-images", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
 
-        if (result.status === false) {
-            toast.error(result.errors.image[0]);
-        } else {
-            setimageId(result.data.id);
+            if (!res.data.status) {
+                toast.error(res.data.errors.image[0]);
+            } else {
+                setImageId(res.data.data.id);
+            }
+        } catch {
+            toast.error("Image upload failed");
+        } finally {
+            setIsDisable(false);
         }
     };
 
     return (
-       <>
-           <Header/>
-           <main>
-               <div className='container py-5'>
-                   <div className='row'>
-                       <div className='col-md-3'>
-                           {/*Sidebar*/}
-                           <Sidebar/>
-                       </div>
-                       <div className='col-md-9'>
-                           {/*Dashboard*/}
-                           <div className='card shadow border-0'>
-                               <div className='card-body p-4'>
-                                   <div className='d-flex justify-content-between'>
-                                       <h4 className='h5'>Edit Article</h4>
-                                       <Link to='/admin/articles' className='btn btn-primary'>Back</Link>
-                                   </div>
-                                   <hr />
+        <>
+            <Header />
+            <main>
+                <div className="container py-5">
+                    <div className="row">
+                        <div className="col-md-3">
+                            <Sidebar />
+                        </div>
 
-                                   <form action="" onSubmit={handleSubmit(onSubmit)}>
-                                       <div className='mb-3'>
-                                           <label htmlFor="" className="form-label">Name</label>
-                                           <input placeholder='Title'
-                                                  {
-                                                      ...register('title',{
-                                                          required: "Title is required"
-                                                      })
-                                                  }
-                                                  type="text" className={`form-control ${errors.title && 'is-invalid'}`}/>
-                                           {
-                                               errors.title && <p className='invalid-feedback'>{errors.title?.message}</p>
-                                           }
-                                       </div>
-                                       <div className='mb-3'>
-                                           <label htmlFor="" className="form-label">Slug</label>
-                                           <input placeholder='Slug'
-                                                  {
-                                                      ...register('slug',{
-                                                          required: "Slug is required"
-                                                      })
-                                                  }
-                                                  type="text" className={`form-control ${errors.slug && 'is-invalid'}`}/>
-                                           {
-                                               errors.slug && <p className='invalid-feedback'>{errors.slug?.message}</p>
-                                           }
-                                       </div>
-                                       <div className='mb-3'>
-                                           <label htmlFor="" className="form-label">Author</label>
-                                           <input placeholder='Author' type='text'
-                                                     {
-                                                         ...register('author')
-                                                     }
-                                                     className='form-control' />
-                                       </div>
-                                       <div className='mb-3'>
-                                           <label htmlFor="" className="form-label">Article Content</label>
-                                           <textarea placeholder='Content'
-                                                     {
-                                                         ...register('content')
-                                                     }
-                                                     className='form-control' rows={4}></textarea>
-                                           {/*<JoditEditor*/}
-                                           {/*    ref={editor}*/}
-                                           {/*    value={content}*/}
-                                           {/*    config={config}*/}
-                                           {/*    tabIndex={1} // tabIndex of textarea*/}
-                                           {/*    onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons*/}
-                                           {/*    onChange={newContent => {}}*/}
-                                           {/*/>*/}
-                                       </div>
-                                       <div className='mb-3'>
-                                           <label htmlFor="" className="form-label">Image</label>
-                                           <br />
-                                           <input onChange={handleFile} type='file' />
-                                       </div>
+                        <div className="col-md-9">
+                            <div className="card shadow border-0">
+                                <div className="card-body p-4">
+                                    <div className="d-flex justify-content-between">
+                                        <h4 className="h5">Edit Article</h4>
+                                        <Link
+                                            to="/admin/articles"
+                                            className="btn btn-primary"
+                                        >
+                                            Back
+                                        </Link>
+                                    </div>
 
-                                       <div className='pb-3'>
-                                           {
-                                               article.image && <img src={fileUrl+'uploads/articles/small/'+article.image} />
-                                           }
-                                       </div>
+                                    <hr />
 
-                                       <div className='mb-3'>
-                                           <label htmlFor="" className="form-label">Status</label>
-                                           <select name="" id="" className="form-control"
-                                                   {
-                                                       ...register('status')
-                                                   }
-                                           >
-                                               <option value='1'>Active</option>
-                                               <option value='0'>Block</option>
-                                           </select>
-                                       </div>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <div className="mb-3">
+                                            <label className="form-label">Title</label>
+                                            <input
+                                                type="text"
+                                                className={`form-control ${
+                                                    errors.title ? "is-invalid" : ""
+                                                }`}
+                                                {...register("title", {
+                                                    required: "Title is required",
+                                                })}
+                                            />
+                                            {errors.title && (
+                                                <div className="invalid-feedback">
+                                                    {errors.title.message}
+                                                </div>
+                                            )}
+                                        </div>
 
-                                       <button disabled={isDisable} className='btn btn-primary'>Update</button>
-                                   </form>
+                                        <div className="mb-3">
+                                            <label className="form-label">Slug</label>
+                                            <input
+                                                type="text"
+                                                className={`form-control ${
+                                                    errors.slug ? "is-invalid" : ""
+                                                }`}
+                                                {...register("slug", {
+                                                    required: "Slug is required",
+                                                })}
+                                            />
+                                            {errors.slug && (
+                                                <div className="invalid-feedback">
+                                                    {errors.slug.message}
+                                                </div>
+                                            )}
+                                        </div>
 
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </main>
-           <Footer/>
-       </>
-    )
-}
+                                        <div className="mb-3">
+                                            <label className="form-label">Author</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                {...register("author")}
+                                            />
+                                        </div>
 
-export default Edit
+                                        <div className="mb-3">
+                                            <label className="form-label">
+                                                Article Content
+                                            </label>
+                                            <textarea
+                                                rows="4"
+                                                className="form-control"
+                                                {...register("content")}
+                                            ></textarea>
+                                        </div>
+
+                                        <div className="mb-3">
+                                            <label className="form-label">Image</label>
+                                            <input
+                                                type="file"
+                                                className="form-control"
+                                                onChange={handleFile}
+                                            />
+                                        </div>
+
+                                        {article?.image && (
+                                            <div className="pb-3">
+                                                <img
+                                                    src={`${fileUrl}uploads/articles/small/${article.image}`}
+                                                    alt="Article"
+                                                />
+                                            </div>
+                                        )}
+
+                                        <div className="mb-3">
+                                            <label className="form-label">Status</label>
+                                            <select
+                                                className="form-control"
+                                                {...register("status", {
+                                                    required: true,
+                                                })}
+                                            >
+                                                <option value="1">Active</option>
+                                                <option value="0">Block</option>
+                                            </select>
+                                        </div>
+
+                                        <button
+                                            className="btn btn-primary"
+                                            disabled={isDisable}
+                                        >
+                                            Update
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <Footer />
+        </>
+    );
+};
+
+export default Edit;
